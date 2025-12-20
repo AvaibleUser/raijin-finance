@@ -1,0 +1,59 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+logging:
+  level:
+    root: warn
+    org:
+      springframework:
+        web: debug
+        data:
+          rest: debug
+
+spring:
+  application:
+    name: finance
+
+  datasource:
+    username: ${DB_USER}
+    password: ${DB_PASS}
+    url: jdbc:postgresql://${DB_HOST}/${DB_DATABASE}?stringtype=unspecified
+
+  web:
+    error:
+      include-message: always
+      include-binding-errors: always
+
+  jackson:
+    time-zone: UTC
+    mapper:
+      "[ACCEPT_CASE_INSENSITIVE_ENUMS]": true
+
+  jpa:
+    show-sql: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+
+  kafka:
+    bootstrap-servers:
+      - ${KAFKA_HOST}
+
+    consumer:
+      value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
+
+security:
+  rsa:
+    public-key: classpath:certs/public-key.pem
+
+kafka:
+  topics:
+    project-commands-topic: project-commands
+    user-commands:
+      topic: user-commands
+      default-value: spring.json.value.default.type=edu.raijin.commons.infrastructure.adapter.messaging.event.identity.UserEvent

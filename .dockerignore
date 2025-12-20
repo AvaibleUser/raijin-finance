@@ -1,0 +1,7 @@
+// Ignore everything in context
+*
+
+// Allow files and folders with a pattern starting with !
+!build.gradle.kts
+!settings.gradle.kts
+!src
