@@ -53,7 +53,10 @@ security:
 
 kafka:
   topics:
-    project-commands-topic: project-commands
+    project-commands:
+      topic: project-commands
+      default-value: spring.json.value.default.type=edu.raijin.commons.infrastructure.adapter.messaging.event.scrum.ProjectEvent
+
     user-commands:
       topic: user-commands
       default-value: spring.json.value.default.type=edu.raijin.commons.infrastructure.adapter.messaging.event.identity.UserEvent
