@@ -14,4 +14,10 @@ public interface JpaProjectRepository extends JpaRepository<ProjectsEntity, UUID
     Optional<ProjectsEntity> findByIdAndDeletedFalse(UUID id);
 
     boolean existsByIdAndDeletedFalse(UUID id);
+
+    boolean existsByIdAndDeletedFalseAndMembersIdAndMembersDeletedFalse(UUID projectId, UUID userId);
+
+    default boolean existsMember(UUID projectId, UUID userId) {
+        return existsByIdAndDeletedFalseAndMembersIdAndMembersDeletedFalse(projectId, userId);
+    }
 }

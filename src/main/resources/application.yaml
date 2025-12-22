@@ -66,3 +66,10 @@ kafka:
         spring.json.value.default.type=edu.raijin.commons.infrastructure.adapter.messaging.event.identity.UserEvent,\
         enable.auto.commit=false\
         auto.offset.reset=earliest
+
+    member-commands:
+      topic: member-commands
+      properties: \
+        spring.json.value.default.type=edu.raijin.commons.infrastructure.adapter.messaging.event.identity.UserEvent,\
+        enable.auto.commit=false\
+        auto.offset.reset=earliest
