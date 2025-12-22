@@ -31,8 +31,6 @@ public class Employee {
 
     private String lastName;
 
-    private String dpi;
-
     private String email;
 
     @Builder.Default
@@ -51,7 +49,6 @@ public class Employee {
         requireNonNull(id, () -> new BadRequestException("El usuario es requerido"));
         requireNonBlank(firstName, () -> new BadRequestException("El nombre es requerido"));
         requireNonBlank(lastName, () -> new BadRequestException("El apellido es requerido"));
-        requireNonBlank(dpi, () -> new BadRequestException("El DPI es requerido"));
         requireNonBlank(email, () -> new BadRequestException("El correo es requerido"));
         requireNonNull(hired, () -> new BadRequestException("El estado es requerido"));
     }
@@ -59,7 +56,6 @@ public class Employee {
     public void updateFrom(Employee updated) {
         this.firstName = firstNonNull(updated.firstName, this.firstName);
         this.lastName = firstNonNull(updated.lastName, this.lastName);
-        this.dpi = firstNonNull(updated.dpi, this.dpi);
         this.email = firstNonNull(updated.email, this.email);
         this.hired = firstNonNull(updated.hired, this.hired);
     }

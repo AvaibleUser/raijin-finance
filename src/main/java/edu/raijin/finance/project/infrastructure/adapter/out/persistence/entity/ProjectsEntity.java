@@ -1,7 +1,6 @@
 package edu.raijin.finance.project.infrastructure.adapter.out.persistence.entity;
 
 import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.UUID;
 import static lombok.AccessLevel.PRIVATE;
 
 import java.math.BigDecimal;
@@ -15,7 +14,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import edu.raijin.finance.employee.infrastructure.adapter.out.persistence.entity.EmployeesEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -37,7 +35,6 @@ import lombok.NoArgsConstructor;
 public class ProjectsEntity {
 
     @Id
-    @GeneratedValue(strategy = UUID)
     private UUID id;
 
     @Column(nullable = false)
