@@ -55,8 +55,14 @@ kafka:
   topics:
     project-commands:
       topic: project-commands
-      default-value: spring.json.value.default.type=edu.raijin.commons.infrastructure.adapter.messaging.event.scrum.ProjectEvent
+      properties: \
+        spring.json.value.default.type=edu.raijin.commons.infrastructure.adapter.messaging.event.scrum.ProjectEvent,\
+        enable.auto.commit=false\
+        auto.offset.reset=earliest
 
     user-commands:
       topic: user-commands
-      default-value: spring.json.value.default.type=edu.raijin.commons.infrastructure.adapter.messaging.event.identity.UserEvent
+      properties: \
+        spring.json.value.default.type=edu.raijin.commons.infrastructure.adapter.messaging.event.identity.UserEvent,\
+        enable.auto.commit=false\
+        auto.offset.reset=earliest
