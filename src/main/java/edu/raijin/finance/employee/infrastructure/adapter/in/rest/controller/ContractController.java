@@ -39,6 +39,12 @@ public class ContractController {
     private final DeleteContractUseCase delete;
     private final ContractDtoMapper mapper;
 
+    @GetMapping("/current")
+    public ContractDto fetch(@PathVariable UUID employeeId) {
+        Contract contract = fetch.fetchEmployeeCurrentContract(employeeId);
+        return mapper.toDto(contract);
+    }
+
     @GetMapping("/{contractId}")
     public ContractDto fetch(@PathVariable UUID employeeId, @PathVariable Long contractId) {
         Contract contract = fetch.fetch(employeeId, contractId);
