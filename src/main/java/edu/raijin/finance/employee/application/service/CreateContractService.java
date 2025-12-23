@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.raijin.commons.domain.type.ContractStatus;
 import edu.raijin.commons.util.exception.RequestConflictException;
 import edu.raijin.commons.util.exception.ValueNotFoundException;
 import edu.raijin.finance.employee.domain.model.Contract;
@@ -26,7 +27,7 @@ public class CreateContractService implements CreateContractUseCase {
         if (!register.existsEmployee(employeeId)) {
             throw new ValueNotFoundException("El empleado no se encuentra registrado");
         }
-        if (register.existsCurrentByEmployeeId(employeeId)) {
+        if (contract.getStatus() == ContractStatus.ACTIVE && register.existsCurrentByEmployeeId(employeeId)) {
             throw new RequestConflictException("El empleado ya tiene un contrato vigente");
         }
         contract.checkValidRegistration();
