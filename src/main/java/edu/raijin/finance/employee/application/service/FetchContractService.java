@@ -2,9 +2,11 @@ package edu.raijin.finance.employee.application.service;
 
 import java.util.UUID;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.raijin.commons.domain.model.Paged;
 import edu.raijin.commons.util.exception.ValueNotFoundException;
 import edu.raijin.finance.employee.domain.model.Contract;
 import edu.raijin.finance.employee.domain.port.persistence.FindContractPort;
@@ -22,6 +24,12 @@ public class FetchContractService implements FetchContractUseCase {
     public Contract fetch(UUID employeeId, Long contractId) {
         return find.findByIdAndEmployeeId(contractId, employeeId)
                 .orElseThrow(() -> new ValueNotFoundException("El contrato no se encuentra registrado"));
+    }
+
+    @Override
+    @Transactional
+    public Paged<Contract> fetchAll(UUID employeeId, Pageable pageable) {
+        return find.fetchAll(employeeId, pageable);
     }
 
     @Override

@@ -3,8 +3,11 @@ package edu.raijin.finance.employee.infrastructure.adapter.out.persistence.impl;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import edu.raijin.commons.domain.model.Paged;
 import edu.raijin.commons.util.annotation.Adapter;
 import edu.raijin.finance.employee.domain.model.Contract;
 import edu.raijin.finance.employee.domain.port.persistence.FindContractPort;
@@ -43,6 +46,12 @@ public class ContractRepositoryAdapter implements FindContractPort, RegisterCont
     public Optional<Contract> findByIdAndEmployeeId(Long id, UUID employeeId) {
         return contractRepository.findByIdAndEmployeeIdAndDeletedFalse(id, employeeId)
                 .map(mapper::toDomain);
+    }
+
+    @Override
+    public Paged<Contract> fetchAll(UUID employeeId, Pageable pageable) {
+        Page<ContractsEntity> page = contractRepository.findByEmployeeIdAndDeletedFalse(employeeId, pageable);
+        return Paged.from(page.map(mapper::toDomain));
     }
 
     @Override

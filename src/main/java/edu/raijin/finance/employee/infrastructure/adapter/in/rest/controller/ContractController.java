@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 import java.util.UUID;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.raijin.commons.domain.model.Paged;
 import edu.raijin.commons.util.annotation.Adapter;
 import edu.raijin.finance.employee.domain.model.Contract;
 import edu.raijin.finance.employee.domain.usecase.CreateContractUseCase;
@@ -38,6 +40,12 @@ public class ContractController {
     private final UpdateContractUseCase update;
     private final DeleteContractUseCase delete;
     private final ContractDtoMapper mapper;
+
+    @GetMapping
+    public Paged<ContractDto> fetchAll(@PathVariable UUID employeeId, Pageable pageable) {
+        Paged<Contract> contract = fetch.fetchAll(employeeId, pageable);
+        return contract.map(mapper::toDto);
+    }
 
     @GetMapping("/current")
     public ContractDto fetch(@PathVariable UUID employeeId) {

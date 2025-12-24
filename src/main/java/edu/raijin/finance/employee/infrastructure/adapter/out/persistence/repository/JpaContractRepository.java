@@ -3,6 +3,8 @@ package edu.raijin.finance.employee.infrastructure.adapter.out.persistence.repos
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +19,8 @@ public interface JpaContractRepository extends JpaRepository<ContractsEntity, Lo
     Optional<ContractsEntity> findByIdAndEmployeeIdAndDeletedFalse(Long id, UUID employeeId);
 
     Optional<ContractsEntity> findByEmployeeIdAndStatusNotAndDeletedFalse(UUID employeeId, ContractStatus status);
+
+    Page<ContractsEntity> findByEmployeeIdAndDeletedFalse(UUID employeeId, Pageable pageable);
 
     boolean existsByIdAndDeletedFalse(Long id);
 
