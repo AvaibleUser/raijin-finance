@@ -23,7 +23,7 @@ public class UpdateContractService implements UpdateContractUseCase {
 
     @Override
     @Transactional
-    public Contract update(UUID employeeId, Long contractId, Contract patches) {
+    public Contract update(UUID employeeId, UUID contractId, Contract patches) {
         Contract contract = update.findByIdAndEmployeeId(contractId, employeeId)
                 .orElseThrow(() -> new ValueNotFoundException("El contrato no se encuentra registrado"));
 

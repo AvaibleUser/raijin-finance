@@ -54,7 +54,7 @@ public class ContractController {
     }
 
     @GetMapping("/{contractId}")
-    public ContractDto fetch(@PathVariable UUID employeeId, @PathVariable Long contractId) {
+    public ContractDto fetch(@PathVariable UUID employeeId, @PathVariable UUID contractId) {
         Contract contract = fetch.fetch(employeeId, contractId);
         return mapper.toDto(contract);
     }
@@ -67,7 +67,7 @@ public class ContractController {
     }
 
     @PutMapping("/{contractId}")
-    public ContractDto update(@PathVariable UUID employeeId, @PathVariable Long contractId,
+    public ContractDto update(@PathVariable UUID employeeId, @PathVariable UUID contractId,
             @RequestBody AddContractDto contract) {
         Contract updated = update.update(employeeId, contractId, mapper.toDomain(contract));
         return mapper.toDto(updated);
@@ -75,7 +75,7 @@ public class ContractController {
 
     @DeleteMapping("/{contractId}")
     @ResponseStatus(NO_CONTENT)
-    public void delete(@PathVariable UUID employeeId, @PathVariable Long contractId) {
+    public void delete(@PathVariable UUID employeeId, @PathVariable UUID contractId) {
         delete.delete(employeeId, contractId);
     }
 }

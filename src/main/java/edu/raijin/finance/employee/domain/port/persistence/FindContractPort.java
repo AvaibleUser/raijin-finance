@@ -14,7 +14,7 @@ public interface FindContractPort {
 
     Paged<Contract> fetchAll(UUID employeeId, Pageable pageable);
 
-    Optional<Contract> findByIdAndEmployeeId(Long id, UUID employeeId);
+    Optional<Contract> findByIdAndEmployeeId(UUID id, UUID employeeId);
 
     Optional<Contract> findCurrentByEmployeeId(UUID employeeId);
 }

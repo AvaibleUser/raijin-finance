@@ -21,7 +21,7 @@ public class FetchContractService implements FetchContractUseCase {
 
     @Override
     @Transactional
-    public Contract fetch(UUID employeeId, Long contractId) {
+    public Contract fetch(UUID employeeId, UUID contractId) {
         return find.findByIdAndEmployeeId(contractId, employeeId)
                 .orElseThrow(() -> new ValueNotFoundException("El contrato no se encuentra registrado"));
     }

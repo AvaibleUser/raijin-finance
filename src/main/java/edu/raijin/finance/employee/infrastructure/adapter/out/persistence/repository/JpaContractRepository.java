@@ -12,21 +12,21 @@ import edu.raijin.commons.domain.type.ContractStatus;
 import edu.raijin.finance.employee.infrastructure.adapter.out.persistence.entity.ContractsEntity;
 
 @Repository
-public interface JpaContractRepository extends JpaRepository<ContractsEntity, Long> {
+public interface JpaContractRepository extends JpaRepository<ContractsEntity, UUID> {
 
-    Optional<ContractsEntity> findByIdAndDeletedFalse(Long id);
+    Optional<ContractsEntity> findByIdAndDeletedFalse(UUID id);
 
-    Optional<ContractsEntity> findByIdAndEmployeeIdAndDeletedFalse(Long id, UUID employeeId);
+    Optional<ContractsEntity> findByIdAndEmployeeIdAndDeletedFalse(UUID id, UUID employeeId);
 
     Optional<ContractsEntity> findByEmployeeIdAndStatusNotAndDeletedFalse(UUID employeeId, ContractStatus status);
 
     Page<ContractsEntity> findByEmployeeIdAndDeletedFalse(UUID employeeId, Pageable pageable);
 
-    boolean existsByIdAndDeletedFalse(Long id);
+    boolean existsByIdAndDeletedFalse(UUID id);
 
     boolean existsByEmployeeIdAndStatusNotAndDeletedFalse(UUID employeeId, ContractStatus status);
 
-    boolean existsByIdNotAndEmployeeIdAndStatusNotAndDeletedFalse(Long id, UUID employeeId, ContractStatus status);
+    boolean existsByIdNotAndEmployeeIdAndStatusNotAndDeletedFalse(UUID id, UUID employeeId, ContractStatus status);
 
     default Optional<ContractsEntity> findEmployeeCurrentContract(UUID employeeId) {
         return findByEmployeeIdAndStatusNotAndDeletedFalse(employeeId, ContractStatus.TERMINATED);
@@ -36,7 +36,7 @@ public interface JpaContractRepository extends JpaRepository<ContractsEntity, Lo
         return existsByEmployeeIdAndStatusNotAndDeletedFalse(employeeId, ContractStatus.TERMINATED);
     }
 
-    default boolean existsAnotherCurrentByEmployeeId(Long id, UUID employeeId) {
+    default boolean existsAnotherCurrentByEmployeeId(UUID id, UUID employeeId) {
         return existsByIdNotAndEmployeeIdAndStatusNotAndDeletedFalse(id, employeeId, ContractStatus.TERMINATED);
     }
 }

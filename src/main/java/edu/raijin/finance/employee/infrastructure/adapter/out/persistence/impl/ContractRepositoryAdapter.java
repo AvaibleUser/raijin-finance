@@ -43,7 +43,7 @@ public class ContractRepositoryAdapter implements FindContractPort, RegisterCont
     }
 
     @Override
-    public Optional<Contract> findByIdAndEmployeeId(Long id, UUID employeeId) {
+    public Optional<Contract> findByIdAndEmployeeId(UUID id, UUID employeeId) {
         return contractRepository.findByIdAndEmployeeIdAndDeletedFalse(id, employeeId)
                 .map(mapper::toDomain);
     }
@@ -55,7 +55,7 @@ public class ContractRepositoryAdapter implements FindContractPort, RegisterCont
     }
 
     @Override
-    public boolean existsAnotherCurrentByEmployeeId(Long id, UUID employeeId) {
+    public boolean existsAnotherCurrentByEmployeeId(UUID id, UUID employeeId) {
         return contractRepository.existsAnotherCurrentByEmployeeId(id, employeeId);
     }
 

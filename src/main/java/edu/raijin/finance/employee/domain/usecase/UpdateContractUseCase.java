@@ -8,5 +8,5 @@ import edu.raijin.finance.employee.domain.model.Contract;
 @UseCase
 public interface UpdateContractUseCase {
 
-    Contract update(UUID employeeId, Long contractId, Contract contract);
+    Contract update(UUID employeeId, UUID contractId, Contract contract);
 }

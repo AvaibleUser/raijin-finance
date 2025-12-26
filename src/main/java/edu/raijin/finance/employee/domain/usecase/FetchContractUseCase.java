@@ -11,7 +11,7 @@ import edu.raijin.finance.employee.domain.model.Contract;
 @UseCase
 public interface FetchContractUseCase {
 
-    Contract fetch(UUID employeeId, Long contractId);
+    Contract fetch(UUID employeeId, UUID contractId);
 
     Paged<Contract> fetchAll(UUID employeeId, Pageable pageable);
 

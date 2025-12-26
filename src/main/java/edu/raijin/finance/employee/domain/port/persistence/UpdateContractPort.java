@@ -9,9 +9,9 @@ import edu.raijin.finance.employee.domain.model.Contract;
 @Port
 public interface UpdateContractPort {
 
-    boolean existsAnotherCurrentByEmployeeId(Long id, UUID employeeId);
+    boolean existsAnotherCurrentByEmployeeId(UUID id, UUID employeeId);
 
-    Optional<Contract> findByIdAndEmployeeId(Long id, UUID employeeId);
+    Optional<Contract> findByIdAndEmployeeId(UUID id, UUID employeeId);
 
     Contract update(Contract contract);
 }

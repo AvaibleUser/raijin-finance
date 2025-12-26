@@ -7,5 +7,5 @@ import edu.raijin.commons.util.annotation.UseCase;
 @UseCase
 public interface DeleteContractUseCase {
 
-    void delete(UUID employeeId, Long contractId);
+    void delete(UUID employeeId, UUID contractId);
 }

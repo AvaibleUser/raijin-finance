@@ -20,7 +20,7 @@ public class DeleteContractService implements DeleteContractUseCase {
 
     @Override
     @Transactional
-    public void delete(UUID employeeId, Long contractId) {
+    public void delete(UUID employeeId, UUID contractId) {
         Contract contract = update.findByIdAndEmployeeId(contractId, employeeId).orElse(null);
         if (contract == null) {
             return;
