@@ -81,6 +81,6 @@ kafka:
     member-commands:
       topic: member-commands
       properties: \
-        spring.json.value.default.type=edu.raijin.commons.infrastructure.adapter.messaging.event.identity.UserEvent,\
+        spring.json.value.default.type=edu.raijin.commons.infrastructure.adapter.messaging.event.scrum.MemberEvent,\
         enable.auto.commit=false\
         auto.offset.reset=earliest
