@@ -20,7 +20,7 @@ import lombok.With;
 
 @Data
 @With
-@Builder
+@Builder(toBuilder = true)
 @Setter(NONE)
 @NoArgsConstructor
 @AllArgsConstructor(access = PRIVATE)
@@ -52,6 +52,18 @@ public class Discount {
         this.amount = firstNonNull(updated.amount, this.amount);
         this.reason = firstNonNull(updated.reason, this.reason);
         this.createdAt = firstNonNull(updated.createdAt, this.createdAt);
+    }
+
+    public Discount diff(Discount updated) {
+        return updated.toBuilder()
+                .amount(updated.amount.subtract(this.amount == null ? BigDecimal.ZERO : this.amount))
+                .build();
+    }
+
+    public Discount deleted() {
+        return toBuilder()
+                .amount(amount.negate())
+                .build();
     }
 
     public void delete() {

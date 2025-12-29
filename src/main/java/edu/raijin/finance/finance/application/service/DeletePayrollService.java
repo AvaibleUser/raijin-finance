@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.raijin.finance.finance.domain.model.Payroll;
+import edu.raijin.finance.finance.domain.port.messaging.DeletedPayrollPublisherPort;
 import edu.raijin.finance.finance.domain.port.persistence.UpdatePayrollPort;
 import edu.raijin.finance.finance.domain.usecase.DeletePayrollUseCase;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class DeletePayrollService implements DeletePayrollUseCase {
 
     private final UpdatePayrollPort update;
+    private final DeletedPayrollPublisherPort publisher;
 
     @Override
     @Transactional
@@ -24,7 +26,10 @@ public class DeletePayrollService implements DeletePayrollUseCase {
             return;
         }
 
+        Payroll deleted = payroll.deleted();
         payroll.delete();
         update.update(payroll);
+
+        publisher.publishDeletedPayroll(deleted);
     }
 }

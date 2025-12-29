@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.raijin.commons.util.exception.ValueNotFoundException;
 import edu.raijin.finance.salary.domain.model.Discount;
+import edu.raijin.finance.salary.domain.port.messaging.UpdatedDiscountPublisherPort;
 import edu.raijin.finance.salary.domain.port.persistence.UpdateDiscountPort;
 import edu.raijin.finance.salary.domain.usecase.UpdateDiscountUseCase;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class UpdateDiscountService implements UpdateDiscountUseCase {
 
     private final UpdateDiscountPort update;
+    private final UpdatedDiscountPublisherPort publisher;
 
     @Override
     @Transactional
@@ -23,9 +25,12 @@ public class UpdateDiscountService implements UpdateDiscountUseCase {
         Discount discount = update.findByIdAndEmployeeId(discountId, employeeId)
                 .orElseThrow(() -> new ValueNotFoundException("El descuento no se encuentra registrado"));
 
+        Discount diff = discount.diff(patches);
         discount.updateFrom(patches);
         discount.checkValidRegistration();
 
-        return update.update(discount);
+        Discount updated = update.update(discount);
+        publisher.publishUpdatedDiscount(diff);
+        return updated;
     }
 }

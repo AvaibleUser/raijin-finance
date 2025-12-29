@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.raijin.finance.finance.domain.model.Income;
+import edu.raijin.finance.finance.domain.port.messaging.DeletedIncomePublisherPort;
 import edu.raijin.finance.finance.domain.port.persistence.UpdateIncomePort;
 import edu.raijin.finance.finance.domain.usecase.DeleteIncomeUseCase;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class DeleteIncomeService implements DeleteIncomeUseCase {
 
     private final UpdateIncomePort update;
+    private final DeletedIncomePublisherPort publisher;
 
     @Override
     @Transactional
@@ -24,7 +26,10 @@ public class DeleteIncomeService implements DeleteIncomeUseCase {
             return;
         }
 
+        Income deleted = income.deleted();
         income.delete();
         update.update(income);
+
+        publisher.publishDeletedIncome(deleted);
     }
 }

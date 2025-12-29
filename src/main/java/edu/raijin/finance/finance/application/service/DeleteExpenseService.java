@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.raijin.finance.finance.domain.model.Expense;
+import edu.raijin.finance.finance.domain.port.messaging.DeletedExpensePublisherPort;
 import edu.raijin.finance.finance.domain.port.persistence.UpdateExpensePort;
 import edu.raijin.finance.finance.domain.usecase.DeleteExpenseUseCase;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class DeleteExpenseService implements DeleteExpenseUseCase {
 
     private final UpdateExpensePort update;
+    private final DeletedExpensePublisherPort publisher;
 
     @Override
     @Transactional
@@ -24,7 +26,10 @@ public class DeleteExpenseService implements DeleteExpenseUseCase {
             return;
         }
 
+        Expense deleted = expense.deleted();
         expense.delete();
         update.update(expense);
+
+        publisher.publishDeletedExpense(deleted);
     }
 }

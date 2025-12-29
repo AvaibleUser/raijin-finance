@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.raijin.commons.util.exception.ValueNotFoundException;
 import edu.raijin.finance.finance.domain.model.Income;
+import edu.raijin.finance.finance.domain.port.messaging.CreatedIncomePublisherPort;
 import edu.raijin.finance.finance.domain.port.persistence.RegisterIncomePort;
 import edu.raijin.finance.finance.domain.usecase.CreateIncomeUseCase;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class CreateIncomeService implements CreateIncomeUseCase {
 
     private final RegisterIncomePort register;
+    private final CreatedIncomePublisherPort publisher;
 
     @Override
     @Transactional
@@ -24,6 +26,9 @@ public class CreateIncomeService implements CreateIncomeUseCase {
             throw new ValueNotFoundException("El proyecto no se encuentra registrado");
         }
         income.checkValidRegistration();
-        return register.register(projectId, income);
+        Income created = register.register(projectId, income);
+
+        publisher.publishCreatedIncome(created);
+        return created;
     }
 }

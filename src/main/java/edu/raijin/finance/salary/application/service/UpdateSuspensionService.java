@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.raijin.commons.util.exception.ValueNotFoundException;
 import edu.raijin.finance.salary.domain.model.Suspension;
+import edu.raijin.finance.salary.domain.port.messaging.UpdatedSuspensionPublisherPort;
 import edu.raijin.finance.salary.domain.port.persistence.UpdateSuspensionPort;
 import edu.raijin.finance.salary.domain.usecase.UpdateSuspensionUseCase;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class UpdateSuspensionService implements UpdateSuspensionUseCase {
 
     private final UpdateSuspensionPort update;
+    private final UpdatedSuspensionPublisherPort publisher;
 
     @Override
     @Transactional
@@ -23,9 +25,12 @@ public class UpdateSuspensionService implements UpdateSuspensionUseCase {
         Suspension suspension = update.findByIdAndEmployeeId(suspensionId, employeeId)
                 .orElseThrow(() -> new ValueNotFoundException("La suspensión no se encuentra registrada"));
 
+        Suspension diff = suspension.diff(patches);
         suspension.updateFrom(patches);
         suspension.checkValidRegistration();
 
-        return update.update(suspension);
+        Suspension updated = update.update(suspension);
+        publisher.publishUpdatedSuspension(diff);
+        return updated;
     }
 }

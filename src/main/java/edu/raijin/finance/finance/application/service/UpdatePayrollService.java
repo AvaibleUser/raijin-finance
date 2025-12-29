@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.raijin.commons.util.exception.ValueNotFoundException;
 import edu.raijin.finance.finance.domain.model.Payroll;
+import edu.raijin.finance.finance.domain.port.messaging.UpdatedPayrollPublisherPort;
 import edu.raijin.finance.finance.domain.port.persistence.UpdatePayrollPort;
 import edu.raijin.finance.finance.domain.usecase.UpdatePayrollUseCase;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class UpdatePayrollService implements UpdatePayrollUseCase {
 
     private final UpdatePayrollPort update;
+    private final UpdatedPayrollPublisherPort publisher;
 
     @Override
     @Transactional
@@ -23,9 +25,13 @@ public class UpdatePayrollService implements UpdatePayrollUseCase {
         Payroll payroll = update.findByIdAndEmployeeId(payrollId, employeeId)
                 .orElseThrow(() -> new ValueNotFoundException("El bono no se encuentra registrado"));
 
+        Payroll diff = payroll.diff(patches);
         payroll.updateFrom(patches);
         payroll.checkValidRegistration();
 
-        return update.update(payroll);
+        Payroll updated = update.update(payroll);
+
+        publisher.publishUpdatedPayroll(diff);
+        return updated;
     }
 }

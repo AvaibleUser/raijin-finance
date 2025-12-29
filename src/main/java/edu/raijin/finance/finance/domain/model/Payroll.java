@@ -22,7 +22,7 @@ import lombok.With;
 
 @Data
 @With
-@Builder
+@Builder(toBuilder = true)
 @Setter(NONE)
 @NoArgsConstructor
 @AllArgsConstructor(access = PRIVATE)
@@ -75,6 +75,18 @@ public class Payroll {
         this.paymentDate = firstNonNull(updated.paymentDate, this.paymentDate);
         this.fromDate = firstNonNull(updated.fromDate, this.fromDate);
         this.toDate = firstNonNull(updated.toDate, this.toDate);
+    }
+
+    public Payroll diff(Payroll updated) {
+        return updated.toBuilder()
+                .baseSalary(updated.baseSalary.subtract(this.baseSalary == null ? BigDecimal.ZERO : this.baseSalary))
+                .build();
+    }
+
+    public Payroll deleted() {
+        return toBuilder()
+                .baseSalary(baseSalary.negate())
+                .build();
     }
 
     public void delete() {

@@ -4,5 +4,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("kafka.topics")
 public record KafkaTopicsProperty(
-        String contractCommandsTopic) {
+        String contractCommandsTopic,
+        String incomeCommandsTopic,
+        String expenseCommandsTopic,
+        String payrollCommandsTopic,
+        String bonusCommandsTopic,
+        String discountCommandsTopic,
+        String suspensionCommandsTopic) {
 }

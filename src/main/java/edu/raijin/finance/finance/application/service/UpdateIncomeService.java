@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.raijin.commons.util.exception.ValueNotFoundException;
 import edu.raijin.finance.finance.domain.model.Income;
+import edu.raijin.finance.finance.domain.port.messaging.UpdatedIncomePublisherPort;
 import edu.raijin.finance.finance.domain.port.persistence.UpdateIncomePort;
 import edu.raijin.finance.finance.domain.usecase.UpdateIncomeUseCase;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class UpdateIncomeService implements UpdateIncomeUseCase {
 
     private final UpdateIncomePort update;
+    private final UpdatedIncomePublisherPort publisher;
 
     @Override
     @Transactional
@@ -23,9 +25,13 @@ public class UpdateIncomeService implements UpdateIncomeUseCase {
         Income income = update.findByIdAndProjectId(incomeId, projectId)
                 .orElseThrow(() -> new ValueNotFoundException("El bono no se encuentra registrado"));
 
+        Income diff = income.diff(patches);
         income.updateFrom(patches);
         income.checkValidRegistration();
 
-        return update.update(income);
+        Income updated = update.update(income);
+
+        publisher.publishUpdatedIncome(diff);
+        return updated;
     }
 }

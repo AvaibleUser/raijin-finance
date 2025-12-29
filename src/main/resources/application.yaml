@@ -64,6 +64,12 @@ security:
 kafka:
   topics:
     contract-commands-topic: contract-commands
+    income-commands-topic: income-commands
+    expense-commands-topic: expense-commands
+    payroll-commands-topic: payroll-commands
+    bonus-commands-topic: bonus-commands
+    discount-commands-topic: discount-commands
+    suspension-commands-topic: suspension-commands
     project-commands:
       topic: project-commands
       properties: \

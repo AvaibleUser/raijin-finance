@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.raijin.finance.salary.domain.model.Suspension;
+import edu.raijin.finance.salary.domain.port.messaging.DeletedSuspensionPublisherPort;
 import edu.raijin.finance.salary.domain.port.persistence.UpdateSuspensionPort;
 import edu.raijin.finance.salary.domain.usecase.DeleteSuspensionUseCase;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class DeleteSuspensionService implements DeleteSuspensionUseCase {
 
     private final UpdateSuspensionPort update;
+    private final DeletedSuspensionPublisherPort publisher;
 
     @Override
     @Transactional
@@ -24,7 +26,10 @@ public class DeleteSuspensionService implements DeleteSuspensionUseCase {
             return;
         }
 
+        Suspension deleted = suspension.deleted();
         suspension.delete();
         update.update(suspension);
+
+        publisher.publishDeletedSuspension(deleted);
     }
 }

@@ -22,7 +22,7 @@ import lombok.With;
 
 @Data
 @With
-@Builder
+@Builder(toBuilder = true)
 @Setter(NONE)
 @NoArgsConstructor
 @AllArgsConstructor(access = PRIVATE)
@@ -64,6 +64,18 @@ public class Suspension {
         this.startDate = firstNonNull(updated.startDate, this.startDate);
         this.endDate = firstNonNull(updated.endDate, this.endDate);
         this.createdAt = firstNonNull(updated.createdAt, this.createdAt);
+    }
+
+    public Suspension diff(Suspension updated) {
+        return updated.toBuilder()
+                .amount(updated.amount.subtract(this.amount == null ? BigDecimal.ZERO : this.amount))
+                .build();
+    }
+
+    public Suspension deleted() {
+        return toBuilder()
+                .amount(amount.negate())
+                .build();
     }
 
     public void delete() {

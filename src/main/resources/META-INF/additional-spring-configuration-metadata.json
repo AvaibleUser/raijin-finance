@@ -28,6 +28,36 @@
       "description": "The name of the Kafka topic"
     },
     {
+      "name": "kafka.topics.income-commands-topic",
+      "type": "java.lang.String",
+      "description": "The name of the Kafka topic"
+    },
+    {
+      "name": "kafka.topics.expense-commands-topic",
+      "type": "java.lang.String",
+      "description": "The name of the Kafka topic"
+    },
+    {
+      "name": "kafka.topics.payroll-commands-topic",
+      "type": "java.lang.String",
+      "description": "The name of the Kafka topic"
+    },
+    {
+      "name": "kafka.topics.bonus-commands-topic",
+      "type": "java.lang.String",
+      "description": "The name of the Kafka topic"
+    },
+    {
+      "name": "kafka.topics.discount-commands-topic",
+      "type": "java.lang.String",
+      "description": "The name of the Kafka topic"
+    },
+    {
+      "name": "kafka.topics.suspension-commands-topic",
+      "type": "java.lang.String",
+      "description": "The name of the Kafka topic"
+    },
+    {
       "name": "kafka.topics.project-commands.topic",
       "type": "java.lang.String",
       "description": "The name of the Kafka topic"

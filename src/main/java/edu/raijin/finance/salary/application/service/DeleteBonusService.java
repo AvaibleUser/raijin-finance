@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.raijin.finance.salary.domain.model.Bonus;
+import edu.raijin.finance.salary.domain.port.messaging.DeletedBonusPublisherPort;
 import edu.raijin.finance.salary.domain.port.persistence.UpdateBonusPort;
 import edu.raijin.finance.salary.domain.usecase.DeleteBonusUseCase;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class DeleteBonusService implements DeleteBonusUseCase {
 
     private final UpdateBonusPort update;
+    private final DeletedBonusPublisherPort publisher;
 
     @Override
     @Transactional
@@ -24,7 +26,10 @@ public class DeleteBonusService implements DeleteBonusUseCase {
             return;
         }
 
+        Bonus deleted = bonus.deleted();
         bonus.delete();
         update.update(bonus);
+
+        publisher.publishDeletedBonus(deleted);
     }
 }

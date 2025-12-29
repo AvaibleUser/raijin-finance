@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.raijin.commons.util.exception.BadRequestException;
 import edu.raijin.commons.util.exception.ValueNotFoundException;
 import edu.raijin.finance.finance.domain.model.Expense;
+import edu.raijin.finance.finance.domain.port.messaging.CreatedExpensePublisherPort;
 import edu.raijin.finance.finance.domain.port.persistence.RegisterExpensePort;
 import edu.raijin.finance.finance.domain.usecase.CreateExpenseUseCase;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class CreateExpenseService implements CreateExpenseUseCase {
 
     private final RegisterExpensePort register;
+    private final CreatedExpensePublisherPort publisher;
 
     @Override
     @Transactional
@@ -35,6 +37,9 @@ public class CreateExpenseService implements CreateExpenseUseCase {
             }
         }
         expense.checkValidRegistration();
-        return register.register(projectId, employeeId, expense);
+        Expense created = register.register(projectId, employeeId, expense);
+
+        publisher.publishCreatedExpense(created);
+        return created;
     }
 }

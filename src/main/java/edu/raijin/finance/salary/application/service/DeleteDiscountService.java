@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.raijin.finance.salary.domain.model.Discount;
+import edu.raijin.finance.salary.domain.port.messaging.DeletedDiscountPublisherPort;
 import edu.raijin.finance.salary.domain.port.persistence.UpdateDiscountPort;
 import edu.raijin.finance.salary.domain.usecase.DeleteDiscountUseCase;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class DeleteDiscountService implements DeleteDiscountUseCase {
 
     private final UpdateDiscountPort update;
+    private final DeletedDiscountPublisherPort publisher;
 
     @Override
     @Transactional
@@ -24,7 +26,10 @@ public class DeleteDiscountService implements DeleteDiscountUseCase {
             return;
         }
 
+        Discount deleted = discount.deleted();
         discount.delete();
         update.update(discount);
+
+        publisher.publishDeletedDiscount(deleted);
     }
 }

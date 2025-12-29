@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.raijin.commons.util.exception.ValueNotFoundException;
 import edu.raijin.finance.finance.domain.model.Payroll;
+import edu.raijin.finance.finance.domain.port.messaging.CreatedPayrollPublisherPort;
 import edu.raijin.finance.finance.domain.port.persistence.RegisterPayrollPort;
 import edu.raijin.finance.finance.domain.usecase.CreatePayrollUseCase;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class CreatePayrollService implements CreatePayrollUseCase {
 
     private final RegisterPayrollPort register;
+    private final CreatedPayrollPublisherPort publisher;
 
     @Override
     @Transactional
@@ -24,6 +26,9 @@ public class CreatePayrollService implements CreatePayrollUseCase {
             throw new ValueNotFoundException("El proyecto no se encuentra registrado");
         }
         payroll.checkValidRegistration();
-        return register.register(employeeId, payroll);
+        Payroll created = register.register(employeeId, payroll);
+
+        publisher.publishCreatedPayroll(created);
+        return created;
     }
 }
